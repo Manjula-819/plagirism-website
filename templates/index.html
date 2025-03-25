@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plagiarism Checker</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border: 1px solid #ddd; }
+        th { background: #f2f2f2; }
+        .highlight { background: #ffcccc; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Plagiarism Checker</h1>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="files" multiple accept=".txt" required>
+            <button type="submit">Check</button>
+        </form>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        {% if results %}
+            <h2>Results</h2>
+            <table>
+                <tr><th>File 1</th><th>File 2</th><th>Similarity</th></tr>
+                {% for file1, file2, score in results %}
+                    <tr class="{% if score >= 0.8 %}highlight{% endif %}">
+                        <td>{{ file1 }}</td>
+                        <td>{{ file2 }}</td>
+                        <td>{{ "%.2f%%" | format(score * 100) }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+</body>
+</html>
